@@ -32,10 +32,10 @@ namespace Demo
             flowLayoutPanel.Controls.Clear();
 
             string sql = @"
-                Select p.[Тип_партнера] as PartnerType,p.[Наименование_партнера] as PartnerName, p.[Директор] as Director,
-                p.[Телефон_партнера] as PartnerNumber, p.[Электронная_почта_партнера] as Email,[Юридический_адрес_партнера] as adress, p.[Рейтинг] as Raiting,ISNULL(s.TotalSell,0) as TotalSell from Partners_import as p
-                LEFT JOIN (Select [Наименование_партнера] as PartnerName, SUM([Количество_продукции]) as TotalSell
-                FROM Partner_products_import GROUP BY [Наименование_партнера]) as s ON p.[Наименование_партнера] = s.PartnerName;";
+                Select [Тип_партнера],[Наименование_партнера],[Директор],[Телефон_партнера],[Электронная_почта_партнера],
+                [Юридический_адрес_партнера],[Рейтинг],s.TotalSell from Partners_import as p
+                LEFT JOIN (Select [Наименование_партнера] as Name, SUM([Количество_продукции]) as TotalSell
+                FROM Partner_products_import GROUP BY [Наименование_партнера]) as s ON p.[Наименование_партнера] = s.Name;";
 
             using (var conn = new SqlConnection(Connection))
             using (var cmd = new SqlCommand(sql, conn))
@@ -110,7 +110,6 @@ namespace Demo
                         Action showDetails = () =>
                         {
                             flowLayoutPanel.Controls.Clear();
-                            Console.WriteLine(type + name + director + number+ email+ adress+ rating);
 
                             var pf = new PartnerForm(this,type,name,director,number,email,adress,rating);
                             pf.Show();
